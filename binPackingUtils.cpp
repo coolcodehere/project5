@@ -99,8 +99,7 @@ vector<binPacking::bin> binPackingUtils::firstFitOffline(int* values, int size){
     int *newArray = new int[size];
     copy(values, values + size, newArray);
     sort(newArray, newArray + size, greater<int>());
-    return firstFitOffline(newArray, size);
-    // return {};
+    return firstFitOnline(newArray, size);
 }
 
 void binPackingUtils::outputBins(const vector<binPacking::bin>& bins) {
