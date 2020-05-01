@@ -1,19 +1,25 @@
 #include "binPackingUtils.h"
 #include "binPacking.h"
 #include <vector>
-#include <stdio.h>      /* printf, scanf, puts, NULL */
-#include <stdlib.h>     /* srand, rand */
+#include <stdio.h> 
+#include <stdlib.h>   
 #include <time.h> 
 #include <algorithm>
+#include <fstream>
 
-
-void generateRandomData(int* data) {
+void generateRandomData(int* data, ofstream& rawdataFile) {
+    rawdataFile << "Values" << endl;
     for (int i = 0; i < 100; i++) {
         data[i] = rand() % 100;
+        rawdataFile << data[i];
     }
 }
 
 int main() {
+    ofstream rawdataFile;
+    ofstream resultsFile;
+    rawdataFile.open("rawData.txt", std::ofstream::out | std::ofstream::trunc);
+    resultsFile.open("results.txt", std::ofstream::out | std::ofstream::trunc);
     int data[100] = {0};
     int averageBins[5] = {0};
     int bestCounts[5] = {0};
@@ -22,7 +28,8 @@ int main() {
 
     for (int i = 0; i < 10; i++) {
         cout << "RUN " << i + 1 << ": " << endl;
-        generateRandomData(data);
+        rawdataFile << "RUN " << i << endl;
+        generateRandomData(data, rawdataFile);
         auto nextFitResults = binPackingUtils::nextFit(data, 100);
         results[0] = nextFitResults.size();
         averageBins[0] += nextFitResults.size();
@@ -49,20 +56,12 @@ int main() {
                 bestCounts[j]++;
             }
         }
-
-        cout << "Bin Counts: " << endl;
-        cout << "\tNext Fit: " << nextFitResults.size() << " bins" << endl;
-        cout << "\tBest Fit Offline: " << bestFitOfflineResults.size() << " bins" << endl;
-        cout << "\tBest Fit Online: " << bestFitOnlineResults.size() << " bins" << endl;
-        cout << "\tFirst Fit Offline: " << firstFitOfflineResults.size() << " bins" << endl;
-        cout << "\tFirst Fit Online: " << firstFitOnlineResults.size() << " bins" << endl;
     }
 
     for (int i = 0; i < 5; i++) {
         averageBins[i] /= 10;
     }
 
-    cout << endl << "-------------------------------------------------" << endl;
     cout << endl << "Average Bins Used: " << endl;
     cout << "\tNext Fit: " << averageBins[0] << " bins" << endl;
     cout << "\tBest Fit Offline: " << averageBins[2] << " bins" << endl;
