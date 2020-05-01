@@ -14,6 +14,7 @@ class binPacking {
             vector<int> bin; 
         };
 
+        // this vv contains these ^^
         vector<bin> bins;
 };
 
